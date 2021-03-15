@@ -1,0 +1,21 @@
+.status-card {
+    text-align: center;
+}
+
+.normal-width {
+    width: 300px;
+}
+
+.normal-height {
+    height: 300px;
+}
+
+.double-width {
+    width: 600px;
+}
+
+.status-card .ant-card-body {
+    height: 100%;
+    padding: 24px;
+    margin: -24px 0px -24px;
+}

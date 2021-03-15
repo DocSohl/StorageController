@@ -1,0 +1,9 @@
+@import '../../node_modules/antd/dist/antd.css';
+
+.site-page-header .ant-page-header-heading-title {
+  font-size: 32px;
+}
+
+.site-page-header .ant-page-header-heading-sub-title {
+  font-size: 23px;
+}

@@ -1,0 +1,12 @@
+.site-layout-content {
+    min-height: calc(100vh - 64px - 70px);
+    padding: 24px;
+    background: #fff;
+}
+
+.logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 40px 16px 0;
+}

@@ -1,17 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import PageLayout from './common/Navigation'
+import Dashboard from "./dashboard_components/Dashboard";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Result } from 'antd';
+
+const Index = () => {
+    return <Router>
+        <PageLayout pathname='/'>
+            <Switch>
+                <Route path='/' exact>
+                    <Dashboard />
+                </Route>
+                <Route path='/ingest' exact>
+                    Test
+                </Route>
+                <Route path='/admin' exact>
+                    <Result
+                        status="500"
+                        title="500"
+                        subTitle="Not Implemented"
+                    />
+                </Route>
+                <Route>
+                    <Result
+                        status="404"
+                        title="404"
+                        subTitle="Page not found"
+                    />,
+                </Route>
+            </Switch>
+        </PageLayout>
+    </Router>;
+};
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Index />
+    </React.StrictMode>,
+    document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
