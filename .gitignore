@@ -1,5 +1,6 @@
 .idea
 .python-version
+storage.db
 
 
 # Byte-compiled / optimized / DLL files
