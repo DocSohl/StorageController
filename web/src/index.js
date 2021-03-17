@@ -14,7 +14,11 @@ const Index = () => {
                     <Dashboard />
                 </Route>
                 <Route path='/ingest' exact>
-                    Test
+                    <Result
+                        status="500"
+                        title="500"
+                        subTitle="Not Implemented"
+                    />
                 </Route>
                 <Route path='/admin' exact>
                     <Result
