@@ -13,8 +13,7 @@ import croniter
 import utils
 
 
-# VOLUME_LOCATION: str = '/gv0'
-VOLUME_LOCATION: str = '/home/isohl/Documents'
+VOLUME_LOCATION: str = '/gv0'
 
 
 def _walk_tld(tld_path: str) -> (str, Dict[str, int], Dict[str, int]):
