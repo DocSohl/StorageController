@@ -2,3 +2,5 @@ fastapi
 uvicorn[standard]
 aiofiles
 glustercli
+croniter
+pysqlite3-binary

@@ -1,0 +1,13 @@
+[Unit]
+Description=Storage Metrics Collector
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/home/isohl/StorageController/cron
+User=isohl
+Type=idle
+ExecStart=/usr/bin/python3 /home/isohl/StorageController/cron/metrics_collector.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
