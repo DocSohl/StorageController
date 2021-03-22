@@ -88,6 +88,31 @@ class RecordSizes(Process):
         db_conn.close()
 
 
+class RecordDiskSizes(Process):
+    def run(self) -> None:
+        logging.info("Checking volume block details")
+        size_info = os.statvfs(VOLUME_LOCATION)
+        total_size = int(size_info.f_blocks * size_info.f_bsize)
+        total_free = int(size_info.f_bfree * size_info.f_bsize)
+        total_used = total_size - total_free
+        db_conn = utils.get_conn()
+        cur = db_conn.cursor()
+        cur.execute("""
+            INSERT INTO metric_groups (metric_s, metric_type)
+            VALUES (?, 'VOLUME_SIZE')
+            ON CONFLICT DO NOTHING
+        """, (time.time(),))
+        group_id = cur.lastrowid
+        cur.execute("""
+            INSERT INTO metrics (group_id, metric_subtype, metric_value)
+            VALUES (?, 'TOTAL_SIZE', ?), (?, 'TOTAL_FREE', ?), (?, 'TOTAL_USED', ?)
+            ON CONFLICT DO NOTHING
+        """, (group_id, total_size, group_id, total_free, group_id, total_used))
+        db_conn.commit()
+        db_conn.close()
+        logging.info("Recorded volume block details")
+
+
 class Cron:
     def __init__(self, cron_expression: str, job_class: Type[Process]) -> None:
         self._cron_expression = cron_expression
@@ -109,16 +134,16 @@ class Cron:
             self._next_execution = self._cron.get_next(float)
 
 
-
-JOBS = {
-    '*/10 * * * *': RecordSizes,
-}
+JOBS = [
+    ('*/10 * * * *', RecordSizes),
+    ('*/10 * * * *', RecordDiskSizes),
+]
 
 
 def main() -> None:
     logging.info("Building cron jobs")
     current_jobs = []
-    for job_cron, job_class in JOBS.items():
+    for job_cron, job_class in JOBS:
         current_jobs.append(Cron(job_cron, job_class))
     logging.info("Starting cron cycle")
     while True:
