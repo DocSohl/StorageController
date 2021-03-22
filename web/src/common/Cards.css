@@ -11,7 +11,11 @@
 }
 
 .double-width {
-    width: 600px;
+    width: 624px;
+}
+
+.triple-width {
+    width: 948px;
 }
 
 .status-card .ant-card-body {

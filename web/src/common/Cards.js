@@ -99,7 +99,7 @@ const ValueCard = (props) => {
 
 const BigProgress = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState({ healthy: 0, total: 0, unit: '' });
+    const [items, setItems] = useState({ completed: 0, total: 0, unit: '' });
 
     useEffect(() => {
         fetch(props.endpoint)
@@ -111,7 +111,7 @@ const BigProgress = (props) => {
                 },
                 (error) => {
                     setIsLoaded(true);
-                    setItems({ healthy: 0, total: 0, unit: '' });
+                    setItems({ completed: 0, total: 0, unit: '' });
                 }
             )
     }, [])
@@ -121,7 +121,7 @@ const BigProgress = (props) => {
             <Col span={24}>
                 <Progress
                     status={items.completed < items.total ?  "active" : null}
-                    percent={items.completed / items.total * 100}
+                    percent={parseInt(items.completed / items.total * 100)}
                 />
             </Col>
         </Row>
@@ -129,6 +129,44 @@ const BigProgress = (props) => {
             <Col span={24}>
                 <Text strong={true} style={{ fontSize: 24 }}>
                     {items.completed} / {items.total} {items.unit}
+                </Text>
+            </Col>
+        </Row>
+    </Card>
+};
+
+
+const UsageProgress = (props) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [items, setItems] = useState({ used: 0, total: 0, unit: '' });
+
+    useEffect(() => {
+        fetch(props.endpoint)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setItems(result);
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setItems({ used: 0, total: 0, unit: '' });
+                }
+            )
+    }, [])
+
+    return <Card title={props.title} className='status-card triple-width normal-height' loading={!isLoaded}>
+        <Row justify="space-around" align="bottom" style={{ height: '50%' }}>
+            <Col span={24}>
+                <Progress strokeWidth={20}
+                    percent={parseInt(items.used / items.total * 100)}
+                />
+            </Col>
+        </Row>
+        <Row justify="space-around" align="top" style={{ height: '50%' }}>
+            <Col span={24}>
+                <Text strong={true} style={{ fontSize: 24 }}>
+                    {items.used} / {items.total} {items.unit}
                 </Text>
             </Col>
         </Row>
@@ -173,4 +211,4 @@ const FlexibleCard = (props) => {
     </Card>
 }
 
-export { StatusCard, HealthCount, ValueCard, BigProgress, FlexibleCard };
+export { StatusCard, HealthCount, ValueCard, BigProgress, FlexibleCard, UsageProgress };

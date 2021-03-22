@@ -8,5 +8,8 @@ git pull
 cd sql || exit
 ./apply_db.py ./*.sql
 cd ..
+cd web || exit
+yarn build
+cd ..
 sudo systemctl start metrics_collector.service
 sudo systemctl start storage_api.service

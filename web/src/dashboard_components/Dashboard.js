@@ -1,5 +1,5 @@
 import {Divider, PageHeader, Space, Radio, Card} from "antd";
-import {BigProgress, FlexibleCard, HealthCount, StatusCard, ValueCard} from "../common/Cards";
+import {BigProgress, FlexibleCard, HealthCount, StatusCard, ValueCard, UsageProgress} from "../common/Cards";
 import React from "react";
 import { useState } from "react";
 import './Dashboard.css';
@@ -38,6 +38,8 @@ const Dashboard = (props) => {
         </Space>
 
         <Divider orientation='left' style={{fontSize: 24}}>Storage</Divider>
+        <UsageProgress title="Total Usage" endpoint='/dashboard/storage/total'/>
+        <br />
         <Space size='small'>
             <Card title="Statistic" bordered={false} className='status-card'>
                 <Radio.Group value={units} onChange={e => setUnits(e.target.value)}>

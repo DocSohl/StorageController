@@ -93,6 +93,35 @@ def get_backup_progress():
     return {'completed': 0, 'total': 0, 'unit': 'MB'}
 
 
+@app.get('/dashboard/storage/total')
+def get_backup_progress():
+    conn = utils.get_conn()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT id
+        FROM metric_groups
+        WHERE metric_type = 'VOLUME_SIZE'
+        ORDER BY metric_s DESC
+        LIMIT 1
+    """)
+    group_id = cur.fetchone()[0]
+    cur.execute("""
+        SELECT metric_value
+        FROM metrics
+        WHERE group_id = ?
+          AND metric_subtype = 'TOTAL_SIZE'
+    """, (group_id,))
+    total_size = cur.fetchone()[0]
+    cur.execute("""
+        SELECT metric_value
+        FROM metrics
+        WHERE group_id = ?
+          AND metric_subtype = 'TOTAL_USED'
+    """, (group_id,))
+    total_used = cur.fetchone()[0]
+    return {'used': round(total_used / 1e12, 2), 'total': round(total_size / 1e12, 2), 'unit': 'TB'}
+
+
 def _get_metric_generic(metric_type: str):
     conn = utils.get_conn()
     cur = conn.cursor()
