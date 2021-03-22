@@ -150,15 +150,15 @@ const FlexibleCard = (props) => {
                 (error) => {
                 }
             )
-    }, [])
+    }, [props])
 
     let rendered_component = '';
     if (isLoaded) {
         if (props.viz === 'StoragePie') {
-            rendered_component = <StoragePie data={items} />
+            rendered_component = <StoragePie data={items} units={props.units} />
         }
         else if (props.viz === 'FileTypeDistribution') {
-            rendered_component = <FileTypeDistribution data={items} />
+            rendered_component = <FileTypeDistribution data={items} units={props.units}/>
         }
         else {
             rendered_component = props.children;

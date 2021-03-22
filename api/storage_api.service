@@ -1,0 +1,13 @@
+[Unit]
+Description=Storage Dashboard API
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/home/isohl/StorageController/api
+User=isohl
+Type=idle
+ExecStart=/home/isohl/.local/bin/uvicorn --port 8080 --host 0.0.0.0 main:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

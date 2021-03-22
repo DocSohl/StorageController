@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from glustercli.cli import volume, peer
 
@@ -93,22 +93,56 @@ def get_backup_progress():
     return {'completed': 0, 'total': 0, 'unit': 'MB'}
 
 
+def _get_metric_generic(metric_type: str):
+    conn = utils.get_conn()
+    cur = conn.cursor()
+    cur.execute("""
+            SELECT id
+            FROM metric_groups
+            WHERE metric_type = ?
+            ORDER BY metric_s DESC
+            LIMIT 1
+        """, (metric_type,))
+    group_id = cur.fetchone()[0]
+    cur.execute("""
+            SELECT metric_subtype, metric_value
+            FROM metrics
+            WHERE group_id = ?
+            ORDER BY metric_value DESC
+        """, (group_id,))
+    results = []
+    for i, row in enumerate(cur):
+        if i > 10:
+            results[-1]['subtype'] = 'Other'
+            results[-1]['value'] += row[1]
+        else:
+            results.append({
+                'subtype': row[0],
+                'value': row[1],
+            })
+    return results
+
+
 @app.get('/dashboard/storage/usage')
-def get_storage_usage():
-    return [{
-        'folder': 'None',
-        'count': 1,
-        'size': 1
-    }]
+def get_storage_usage(group: str = 'tld'):
+    if group == 'tld':
+        metric_type = 'SIZE_BY_TLD'
+    elif group == 'type':
+        metric_type = 'SIZE_BY_TYPE'
+    else:
+        raise HTTPException(status_code=400, detail="Invalid Group")
+    return _get_metric_generic(metric_type)
 
 
-@app.get('/dashboard/storage/file_types')
-def get_storage_file_types():
-    return [{
-        'file_type': 'None',
-        'count': 1,
-        'size': 1
-    }]
+@app.get('/dashboard/storage/counts')
+def get_storage_file_types(group: str = 'tld'):
+    if group == 'tld':
+        metric_type = 'COUNT_BY_TLD'
+    elif group == 'type':
+        metric_type = 'COUNT_BY_TYPE'
+    else:
+        raise HTTPException(status_code=400, detail="Invalid Group")
+    return _get_metric_generic(metric_type)
 
 
 if os.path.exists('../web/build'):
