@@ -22,7 +22,12 @@ const PageLayout = (props) => (
                         Ingest
                     </Link>
                 </Menu.Item>
-                <Menu.Item key='/admin'>
+                <Menu.Item key='/help'>
+                    <Link to='/help'>
+                        Help
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key='/admin' danger={true} style={{float: 'right'}}>
                     <Link to='/admin'>
                         Admin
                     </Link>

@@ -20,6 +20,13 @@ const Index = () => {
                         subTitle="Not Implemented"
                     />
                 </Route>
+                <Route path='/help' exact>
+                    <Result
+                        status="500"
+                        title="500"
+                        subTitle="Not Implemented"
+                    />
+                </Route>
                 <Route path='/admin' exact>
                     <Result
                         status="500"
