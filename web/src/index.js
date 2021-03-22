@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import PageLayout from './common/Navigation'
 import Dashboard from "./dashboard_components/Dashboard";
+import Help from "./Help";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Result } from 'antd';
 
@@ -21,11 +22,7 @@ const Index = () => {
                     />
                 </Route>
                 <Route path='/help' exact>
-                    <Result
-                        status="500"
-                        title="500"
-                        subTitle="Not Implemented"
-                    />
+                    <Help />
                 </Route>
                 <Route path='/admin' exact>
                     <Result
